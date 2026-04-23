@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRIDMIND // GEOSPATIAL CORE</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #05070a;
+  color: white;
+  overflow: hidden;
+}
+
+/* BACKGROUND GRID */
+.grid {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.12;
+  z-index: -2;
+}
+
+/* MAP AREA */
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* SIMULATED REGION POINTS */
+.node {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #4da3ff;
+  border-radius: 50%;
+  cursor: pointer;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.8); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* NODE LABEL */
+.label {
+  position: absolute;
+  font-size: 0.8rem;
+  color: #aab4c0;
+  margin-top: 18px;
+}
+
+/* CONTROL PANEL */
+.panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 320px;
+  height: 100%;
+  background: rgba(10,15,25,0.95);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding: 20px;
+}
+
+.title {
+  color: #4da3ff;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.log {
+  font-size: 0.85rem;
+  color: #aab4c0;
+  height: 60%;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+/* ALERT */
+.alert {
+  color: #ff4d4d;
+  margin-top: 10px;
+}
+
+/* STATUS */
+.status {
+  margin-top: 10px;
+  color: #4da3ff;
+}
+
+/* LINES (ENERGY FLOW) */
+.line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4da3ff, transparent);
+  animation: flow 3s infinite linear;
+  opacity: 0.6;
+}
+
+@keyframes flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<!-- MAP -->
+<div class="map">
+
+  <!-- NODES (simulated Zimbabwe region layout) -->
+  <div class="node" style="top:40%; left:45%;" onclick="selectNode('HARARE')"></div>
+  <div class="label" style="top:42%; left:45%;">HARARE NODE</div>
+
+  <div class="node" style="top:55%; left:35%;" onclick="selectNode('BULAWAYO')"></div>
+  <div class="label" style="top:57%; left:35%;">BULAWAYO</div>
+
+  <div class="node" style="top:30%; left:60%;" onclick="selectNode('MUTARE')"></div>
+  <div class="label" style="top:32%; left:60%;">MUTARE</div>
+
+  <div class="node" style="top:65%; left:55%;" onclick="selectNode('GWERU')"></div>
+  <div class="label" style="top:67%; left:55%;">GWERU</div>
+
+  <!-- ENERGY FLOW LINES -->
+  <div class="line" style="top:45%; left:35%; width:200px;"></div>
+  <div class="line" style="top:35%; left:45%; width:180px;"></div>
+  <div class="line" style="top:55%; left:40%; width:220px;"></div>
+
+</div>
+
+<!-- CONTROL PANEL -->
+<div class="panel">
+
+  <div class="title">GRIDMIND GEOSPATIAL CORE</div>
+
+  <div class="status">STATUS: ACTIVE SIMULATION</div>
+
+  <div class="status" id="selected">SELECTED NODE: NONE</div>
+
+  <div class="alert" id="alert"></div>
+
+  <div class="log" id="log">
+    > Geospatial engine initialized<br>
+    > Regional nodes mapped<br>
+    > Energy routing simulation active<br>
+  </div>
+
+</div>
+
+<script>
+
+function log(msg){
+  const l = document.getElementById("log");
+  l.innerHTML += "> " + msg + "<br>";
+  l.scrollTop = l.scrollHeight;
+}
+
+function selectNode(name){
+  document.getElementById("selected").innerText = "SELECTED NODE: " + name;
+  log("Node engaged: " + name);
+
+  if(Math.random() > 0.7){
+    document.getElementById("alert").innerText = "WARNING: Load instability detected at " + name;
+  } else {
+    document.getElementById("alert").innerText = "";
+  }
+}
+
+// SIMULATION ENGINE
+setInterval(() => {
+  const nodes = ["HARARE", "BULAWAYO", "MUTARE", "GWERU"];
+  const randomNode = nodes[Math.floor(Math.random()*nodes.length)];
+  log("Predictive model recalculated for " + randomNode);
+}, 5000);
+
+</script>
+
+</body>
+</html>
